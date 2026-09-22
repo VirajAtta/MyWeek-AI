@@ -15,7 +15,7 @@ const EVENTS: MyWeekEvent[] = RAW_EVENTS.map(withComputedChanges)
 
 /** Relevance rank for ordering "what matters" first. Lower = higher priority. */
 const STATUS_RANK: Record<EventStatus, number> = {
-  ACTION_REQUIRED: 0,
+  REVIEW_RECOMMENDED: 0,
   SOURCE_CONFLICT: 1,
   CHANGED: 2,
   ROLE_NOT_SPECIFIED: 3,
@@ -50,11 +50,11 @@ export function getEventsForEmployee(employeeId: string): MyWeekEvent[] {
 
 /** The single most important event for the hero card. */
 export function getHeroEvent(): MyWeekEvent | undefined {
-  return getMyEvents().find((e) => e.status === 'ACTION_REQUIRED')
+  return getMyEvents().find((e) => e.status === 'REVIEW_RECOMMENDED')
 }
 
 export interface ActionSummary {
-  actionRequired: number
+  reviewRecommended: number
   changes: number
   relevantThisWeek: number
   otherEvents: number
@@ -70,9 +70,10 @@ export function getActionSummary(): ActionSummary {
   const mine = getMyEvents()
   const all = getAllEvents()
 
-  // Events the user must act on.
-  const actionRequired = mine.filter(
-    (e) => e.status === 'ACTION_REQUIRED',
+  // Events MyWeek recommends the user review (advisory — not a documented,
+  // mandatory action).
+  const reviewRecommended = mine.filter(
+    (e) => e.status === 'REVIEW_RECOMMENDED',
   ).length
 
   // Every one of the user's events with a deterministically-detected change
@@ -91,7 +92,7 @@ export function getActionSummary(): ActionSummary {
   // NOT already counting among the relevant-this-week set.
   const otherEvents = all.length - relevantThisWeek
 
-  return { actionRequired, changes, relevantThisWeek, otherEvents }
+  return { reviewRecommended, changes, relevantThisWeek, otherEvents }
 }
 
 export { TODAY }

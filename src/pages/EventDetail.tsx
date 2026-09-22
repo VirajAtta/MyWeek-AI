@@ -34,7 +34,7 @@ import type { MyWeekEvent } from '../data/types'
 /**
  * SCREEN 2 — EVENT INTELLIGENCE / REVIEW CHANGE.
  *
- * The page adapts to the event's status. For the hero (ACTION_REQUIRED) it
+ * The page adapts to the event's status. For the hero (REVIEW_RECOMMENDED) it
  * shows the full change-intelligence flow. For safety scenarios it shows the
  * appropriate uncertainty / conflict / untrusted-content treatment.
  */

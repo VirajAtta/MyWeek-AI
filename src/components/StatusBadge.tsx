@@ -14,8 +14,8 @@ interface StatusMeta {
 }
 
 const META: Record<EventStatus, StatusMeta> = {
-  ACTION_REQUIRED: {
-    label: 'Action required',
+  REVIEW_RECOMMENDED: {
+    label: 'Review recommended',
     dot: '🔴',
     classes: 'bg-action-bg text-action-fg border border-action-border',
     Icon: IconAlert,

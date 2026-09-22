@@ -14,7 +14,7 @@ import type { MyWeekEvent } from './types'
 export const TODAY = '2026-09-22' // Tuesday, September 22, 2026
 
 export const RAW_EVENTS: MyWeekEvent[] = [
-  // ── HERO: ACTION REQUIRED ──────────────────────────────────────────────
+  // ── HERO: REVIEW RECOMMENDED ───────────────────────────────────────────
   {
     id: 'asu-mctec-tour',
     title: 'ASU MCTEC Tour',
@@ -30,7 +30,7 @@ export const RAW_EVENTS: MyWeekEvent[] = [
     source: ['Outlook', 'Airtable'],
     lastUpdated: '2026-09-22T10:14:00',
     critical: true,
-    status: 'ACTION_REQUIRED',
+    status: 'REVIEW_RECOMMENDED',
     previousSnapshot: {
       attendance: 25,
       capturedAt: '2026-09-21T17:00:00',

@@ -6,20 +6,20 @@ import { Avatar } from './Avatar'
 import { IconAlert, IconUsers, IconChat } from './icons'
 
 /**
- * Top header with the personalized greeting, synthetic date, and the
- * logged-in user area (Sarah Martinez · Outreach Coordinator · SM avatar).
- * Also carries a compact primary nav for small screens where the sidebar
- * is hidden.
+ * Top header with the current date and the logged-in user area
+ * (Sarah Martinez · Outreach Coordinator · SM avatar). The personalized
+ * "Good morning, Sarah" greeting lives on the My Actions homepage only —
+ * it is not duplicated here. Also carries a compact primary nav for small
+ * screens where the sidebar is hidden.
  */
 export function Header() {
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/85 backdrop-blur">
       <div className="flex items-center justify-between gap-4 px-5 py-3.5 lg:px-8">
         <div>
-          <h1 className="text-lg font-bold leading-tight text-ink sm:text-xl">
-            Good morning, Sarah
-          </h1>
-          <p className="text-xs text-ink-soft sm:text-sm">{fullDate(TODAY)}</p>
+          <p className="text-sm font-semibold text-ink sm:text-base">
+            {fullDate(TODAY)}
+          </p>
         </div>
 
         <div className="flex items-center gap-3">

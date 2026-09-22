@@ -34,7 +34,10 @@ export function MyActions() {
     <div className="space-y-8">
       {/* Intro */}
       <section>
-        <h2 className="text-xl font-bold text-ink">Good morning, Sarah</h2>
+        <p className="text-xs font-medium uppercase tracking-wide text-brand-600">
+          Turn your calendar into an action plan.
+        </p>
+        <h2 className="mt-1 text-xl font-bold text-ink">Good morning, Sarah</h2>
         <p className="mt-1 text-sm text-ink-muted">
           Here's what changed and what may need your attention.
         </p>
@@ -44,8 +47,8 @@ export function MyActions() {
       <section aria-label="This week at a glance">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <SummaryMetric
-            value={summary.actionRequired}
-            label="Action Required"
+            value={summary.reviewRecommended}
+            label="Review Recommended"
             tone="action"
           />
           <SummaryMetric value={summary.changes} label="Changes" tone="changed" />

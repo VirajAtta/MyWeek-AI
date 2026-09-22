@@ -17,7 +17,7 @@ export interface SourceRef {
 
 /** Event status drives the whole "what needs my attention" ranking. */
 export type EventStatus =
-  | 'ACTION_REQUIRED'
+  | 'REVIEW_RECOMMENDED'
   | 'CHANGED'
   | 'FYI'
   | 'ROLE_NOT_SPECIFIED'
