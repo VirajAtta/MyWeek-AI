@@ -1,111 +1,226 @@
 # MyWeek AI
 
-**Turn your calendar into an action plan.**
-Know what matters, why it matters, what changed, and what may need your attention.
+### Turn your calendar into an action plan.
 
-MyWeek AI is a hackathon prototype (AI + Elections) — an **internal
-operational-awareness tool** for election-office outreach employees. It is
-**not** a voter-facing application and does **not** interact with voting
-equipment, ballots, tabulation systems, voter-registration databases, election
-results, or any election infrastructure.
+**Know what matters, why it matters, what changed, and what may need your attention.**
 
-MyWeek is an **intelligence layer** that sits read-only on top of existing
-operational systems (conceptually Microsoft Outlook + Airtable) and turns
-fragmented operational information into a personalized briefing.
+**Live Prototype:** https://my-week-ai.vercel.app
 
-> This prototype uses **realistic synthetic data only**. There are no real
-> Outlook, Microsoft Graph, Airtable, or election-system integrations, and the
-> app runs fully offline with **no API keys required**.
+MyWeek AI is an **internal operational-awareness tool for election-office outreach employees**, created for the AI + Elections Hackathon.
 
----
+It transforms fragmented event information into a personalized, source-grounded briefing that helps employees understand:
 
-## Core principle: AI interprets. Humans decide.
+* **What matters to me?**
+* **Why does it matter?**
+* **What changed?**
+* **What may need my attention?**
 
-| Layer | Responsibility |
-| --- | --- |
-| **Deterministic change engine** | Compares previous vs. current snapshots (e.g. `25 → 40` attendees). No AI. |
-| **AI interpretation (mock)** | Explains whether a detected change *may* matter to *this* employee, grounded in source facts. |
-| **Human** | Makes the decision. MyWeek is advisory and read-only. |
+MyWeek does not replace an employee's existing operational systems. It acts as a read-only intelligence layer over them.
 
-MyWeek **may** summarize, explain, interpret, rank, answer questions, and point
-to sources. MyWeek **must not** modify Outlook/Airtable, create/cancel events,
-reassign people, expand permissions, hide authoritative records, or present AI
-guesses as official instructions.
+> **Hackathon prototype:** MyWeek currently uses realistic synthetic data and a simulated AI service. There are no real Outlook, Microsoft Graph, Airtable, or election-system integrations, and no external AI API is required.
 
 ---
 
-## Screens
+## The Problem
 
-- **My Actions** (home) — the hero briefing. Summary row (1 Action Required · 2
-  Changes · 5 Relevant This Week · 12 Other Events Available), the ASU MCTEC
-  Tour hero card (`25 → 40` attendees), and a ranked-but-never-hidden event list.
-- **Event Intelligence / Review Change** — *What changed* (deterministic),
-  *Why this may matter* (AI interpretation with per-fact sources), *Documented
-  information* (source facts), *MyWeek Suggestion* (clearly-labeled advisory),
-  plus a **source drawer** showing raw synthetic Outlook/Airtable records incl.
-  historical snapshots.
-- **Ask MyWeek** — conversational Q&A driven by deterministic mock logic. Try
-  the suggested questions; answers are grounded and cite sources.
-- **Team** — shared operational context, grouped by location, with one
-  carefully-labeled coverage alert.
-- **All Events** — the full authorized list (rank, never hide).
-- **About / Trust** → **How MyWeek Handles Uncertainty** — three safety
-  demonstrations: missing role, source conflict, and prompt-injection.
+MyWeek was developed through a co-design process with **Sarah, an election-office employee**, during the AI + Elections Hackathon.
 
----
+Sarah described a roughly 30-person team coordinating approximately **150 events and 50 tours per year**. Their operational information can be distributed across tools such as Microsoft Outlook and Airtable.
 
-## Tech stack
+Outlook is central to Sarah's daily workflow, but a crowded calendar does not always make it immediately clear:
 
-React 18 · TypeScript · Vite · Tailwind CSS · React Router.
+* Why am I involved in this event?
+* What is my responsibility?
+* What changed since I last looked?
+* Does that change affect me?
+* What information is relevant specifically to me?
+* What may require my attention?
+* What is relevant to the rest of my team?
 
-```
-src/
-  data/         # types + synthetic events, team, snapshots
-  services/     # changeEngine (deterministic) · aiService (mock) · dataStore · feedbackStore
-  components/   # AppShell, Sidebar, Header, cards, badges, drawer, feedback, icons
-  pages/        # MyActions, EventDetail, AskMyWeek, TeamView, AllEvents, AboutTrust, Uncertainty
-  utils/        # date helpers
-```
+We initially approached this as an **Outlook/Airtable synchronization problem**.
 
-Clear separation of concerns: **source data → deterministic change detection →
-AI interpretation (mock) → UI**.
+Our co-design process changed that understanding.
 
-### Where a real LLM plugs in
-
-`src/services/aiService.ts` is the *only* module that produces AI
-*interpretation*. Its functions (`interpretChange`, `answerQuestion`,
-`explainRelevance`, `handleUntrustedContent`) return realistic predefined
-responses today, and are `async`-friendly so an approved LLM can be dropped in
-later without changing the UI. A safety-focused system prompt
-(`SAFETY_SYSTEM_PROMPT`) documents the guardrails any real implementation must
-preserve. **No external provider (OpenAI/Anthropic/AWS/etc.) is required.**
+The deeper problem was **operational awareness**: the information exists, but employees still have to find, compare, and interpret it before understanding what matters to them.
 
 ---
 
-## Run locally
+## The Solution
 
-```bash
-npm install
-npm run dev        # start the dev server (Vite provides SPA routing)
-# or
-npm run build && npm run preview
+MyWeek is an **intelligence layer** over existing operational information.
+
+Conceptually:
+
+```text
+Outlook + Airtable
+        ↓
+Existing permissions
+        ↓
+Authorized data only
+        ↓
+Previous + current snapshots
+        ↓
+Deterministic change detection
+        ↓
+Employee + event context
+        ↓
+AI interpretation
+        ↓
+Personalized briefing
+        ↓
+Human decision
 ```
 
-Then open the printed local URL. The default screen is **My Actions**.
+A traditional system can determine:
 
-## Demo flow
+> Attendance changed from **25 → 40**.
 
-1. Open **My Actions** → note the ASU MCTEC Tour, attendance `25 → 40`.
-   (Ordinary software detected the change deterministically.)
-2. Click **Review change** → see *Sarah = Tour Lead* and *visitor materials*
-   from source records, then the **AI interpretation** and **MyWeek Suggestion**
-   with source grounding. Open **View source information** for raw records.
-3. Open **Ask MyWeek** → ask *"What changed since yesterday?"* → grounded answer.
-4. Open **About / Trust → How MyWeek Handles Uncertainty** → *Role not
-   specified*, *Source conflict (Room 101 / Room 202)*, *Prompt injection —
-   permissions unchanged*, and *Rank, never hide.*
+MyWeek combines that detected change with documented context:
+
+> Sarah is the **Tour Lead**.
+
+and can produce an interpretation:
+
+> Because Sarah is the Tour Lead, the attendance increase **may affect preparation for the tour**.
+
+This distinction is central to MyWeek:
+
+**Ordinary software detects what changed. AI interprets why that change may matter to a particular employee.**
 
 ---
 
-*Synthetic demo data. Logged-in demo user: Sarah Martinez, Outreach
-Coordinator. All names and events are fictional.*
+## Core Principle: AI Interprets. Humans Decide.
+
+| Layer                                          | Responsibility                                                                            |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **Deterministic change engine**                | Compares previous and current snapshots, such as `25 → 40` attendees. No AI required.     |
+| **Context retrieval**                          | Retrieves documented roles, event notes, timing, and other authorized information.        |
+| **AI interpretation — simulated in prototype** | Explains why a detected change may matter to this employee using source-grounded context. |
+| **Human**                                      | Reviews the information and makes the operational decision.                               |
+
+MyWeek may:
+
+* Summarize authorized information
+* Explain context
+* Interpret changes
+* Rank information by relevance
+* Answer questions about authorized information
+* Point users back to source records
+
+MyWeek does **not** autonomously:
+
+* Modify Outlook or Airtable
+* Create or cancel events
+* Reassign employees
+* Change documented responsibilities
+* Expand user permissions
+* Hide authoritative records
+* Present AI-generated suggestions as supervisor instructions
+
+---
+
+## Ethics-Driven Redesign
+
+Our original concept allowed AI to **filter out events it considered irrelevant**.
+
+During the hackathon's AI ethics review, we identified a serious failure mode:
+
+> **What happens if the AI incorrectly decides that an important event is irrelevant?**
+
+That feedback materially changed the product.
+
+### Before
+
+**AI determines relevance → low-relevance information can disappear**
+
+### After
+
+**AI ranks information → all authorized information remains accessible**
+
+Our resulting principle is:
+
+## Rank, never hide.
+
+MyWeek determines **priority, not access**.
+
+The ethics review also led us to distinguish three levels of information throughout the interface:
+
+### Source Fact
+
+Directly retrieved from an operational source.
+
+> **Role: Tour Lead**
+> Source: Outlook
+
+### AI Interpretation
+
+Contextual reasoning grounded in source facts.
+
+> Because you're the Tour Lead, the attendance increase may affect preparation.
+
+### MyWeek Suggestion
+
+An optional AI-generated consideration.
+
+> Consider reviewing preparation for the larger group.
+
+MyWeek suggestions are explicitly labeled as **AI-generated and not supervisor instructions**.
+
+---
+
+## Responsible AI Design
+
+### Source-grounded
+
+Important factual claims link back to the source information supporting them.
+
+### Rank, never hide
+
+AI may prioritize information but does not remove authorized events because of a relevance judgment.
+
+### Don't guess
+
+If MyWeek cannot determine someone's role:
+
+> **ROLE NOT SPECIFIED**
+
+rather than inventing a responsibility.
+
+### Surface conflicts
+
+If Outlook and Airtable disagree:
+
+> **SOURCE CONFLICT**
+
+Both values remain visible rather than allowing AI to silently choose.
+
+### Permissions before AI
+
+Existing access controls determine what information reaches MyWeek. The AI does not decide what an employee is authorized to see.
+
+### Untrusted content stays data
+
+Text inside event descriptions is treated as event data, not as instructions capable of changing MyWeek's permissions or behavior.
+
+### Read-only
+
+Authoritative operational systems remain authoritative. MyWeek interprets information rather than autonomously modifying it.
+
+---
+
+## Security Boundary
+
+MyWeek is designed for **internal administrative event and outreach coordination**.
+
+It does **not** interact with:
+
+* Voting equipment
+* Ballots
+* Ballot tabulation systems
+* Voter-registration databases
+* Election results
+* Systems that determine election outcomes
+
+This hackathon prototype uses **synthetic data only**.
+
+Any production connection to o
